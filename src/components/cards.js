@@ -2,23 +2,31 @@ import { Fragment, useEffect, useState } from 'react'
 import AxiosInstance from '../AxiosInstance'
 import ImageCard from './imageCard'
 
-const Cards = () => {
+const Cards = ({ dates, setIsLoading }) => {
   const [data, setData] = useState([])
 
-  const getApod = async() => {
-    AxiosInstance.get(`?api_key=pGl7pcWw9EI3eZcAy9AL0gYlKz5nd63jYZJukjvs&start_date=2022-01-02&end_date=2022-01-05`).then(res => {
-      if (Array.isArray(res.data)) {
-        console.log('over', res.data)
-        setData(res.data)
-      } else{
-        setData([res.data])
-      }
+  const getDate = (date) => {
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+
+    return year + '-' + month + '-' + day
+  }
+
+  const startDate = getDate(dates.start)
+  const endDate = getDate(dates.end)
+
+  const getApod = () => {
+    AxiosInstance.get(`?api_key=pGl7pcWw9EI3eZcAy9AL0gYlKz5nd63jYZJukjvs&start_date=${startDate}&end_date=${endDate}`).then(res => {
+      setData(res.data)
+      setIsLoading(false)
     })
   }
 
   useEffect(() => {
+    setIsLoading(true)
     getApod()
-  }, [])
+  }, [dates])
  
 
   return (

@@ -1,19 +1,28 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react'
 import {
   TextContainer,
   Collapsible,
-  Stack,
-  Button,
   TextStyle,
-  Heading
-} from '@shopify/polaris';
-import styled from 'styled-components';
+  Subheading
+} from '@shopify/polaris'
+import styled, { keyframes } from 'styled-components'
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`
 
 const Card = styled.div`
   width: 100%;
   overflow: hidden;
   border: 1px solid lightgray;
   border-radius: 8px;
+  animation: ${fadeIn} 1s linear;
 
   img {
     height: 30vw;
@@ -43,7 +52,7 @@ const ImageCard = ({apod}) => {
 
       <ContentContainer>
           <TextContainer spacing='tight'>
-            <Heading>{apod.title}</Heading>
+            <Subheading>{apod.title}</Subheading>
             <TextStyle variation='subdued'>{apod.date}</TextStyle>
           </TextContainer>
           {/* <Button
