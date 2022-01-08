@@ -1,6 +1,6 @@
 # Welcome
 Thank you for viewing my Frontend 2022 Summer Intern Challenge for Shopify!
-The demo for this challenge is avaiblable here:
+The demo for this challenge is avaiblable here: https://shopify-2022-nksiu.netlify.app
 
 This application used React and was deployed through Netlify.
 

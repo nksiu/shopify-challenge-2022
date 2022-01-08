@@ -1,6 +1,5 @@
 import { DisplayText } from '@shopify/polaris'
 import { Fragment, useEffect, useState } from 'react'
-// import AxiosInstance from '../AxiosInstance'
 import axios from 'axios'
 import ImageCard from './imageCard'
 
