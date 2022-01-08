@@ -6,13 +6,13 @@ const SelectSC = styled.div`
   width: 150px;
 `
 
-const DateSelect = ({ handleDateType }) => {
+const DateSelect = ({ setIsMulti }) => {
   const [selected, setSelected] = useState('single_date');
 
   const handleSelectChange = useCallback((value) => {
     setSelected(value)
-    handleDateType(value)
-  }, [])
+    setIsMulti(value === 'multiple_dates')
+  }, [setIsMulti])
 
   const options = [
     {label: 'Single Date', value: 'single_date'},

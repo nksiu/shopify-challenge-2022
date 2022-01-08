@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { Button, Modal, Stack } from '@shopify/polaris'
 import DateFilter from './dateFilter'
 
- const DateModal = ({ isMulti, dates, handleDateChange }) => {
+ const DateModal = ({ isMulti, dates, setDates }) => {
   const [active, setActive] = useState(false)
   const [currDate, setCurrDate] = useState(dates)
 
@@ -11,8 +11,7 @@ import DateFilter from './dateFilter'
     setCurrDate(val)
   }
   const onDateSubmit = () => {
-    console.log(currDate)
-    handleDateChange(currDate)
+    setDates(currDate)
     toggleActive()
   }
 

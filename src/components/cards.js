@@ -1,9 +1,11 @@
+import { DisplayText } from '@shopify/polaris'
 import { Fragment, useEffect, useState } from 'react'
 import AxiosInstance from '../AxiosInstance'
 import ImageCard from './imageCard'
 
 const Cards = ({ dates, setIsLoading }) => {
   const [data, setData] = useState([])
+  const [hasError, setHasError] = useState(false)
 
   const getDate = (date) => {
     const year = date.getFullYear()
@@ -18,10 +20,16 @@ const Cards = ({ dates, setIsLoading }) => {
 
   const getApod = () => {
     AxiosInstance.get(`?api_key=pGl7pcWw9EI3eZcAy9AL0gYlKz5nd63jYZJukjvs&start_date=${startDate}&end_date=${endDate}`).then(res => {
+      setHasError(false)
       setData(res.data)
       setIsLoading(false)
     })
+    .catch(err => {
+      console.log(err)
+      setHasError(true)
+    })
   }
+
 
   useEffect(() => {
     setIsLoading(true)
@@ -32,9 +40,12 @@ const Cards = ({ dates, setIsLoading }) => {
   return (
     <Fragment>
       {
-        data.map(apod => (
-          <ImageCard key={apod.title} apod={apod}/>
-        ))
+        hasError ?
+          <DisplayText size='medium'>{data.msg}</DisplayText>
+        :
+          data.map(apod => (
+            <ImageCard key={apod.title} apod={apod}/>
+          ))
       }
     </Fragment>
   )

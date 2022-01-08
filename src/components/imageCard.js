@@ -1,11 +1,11 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import {
   TextContainer,
-  Collapsible,
   TextStyle,
   Subheading
 } from '@shopify/polaris'
 import styled, { keyframes } from 'styled-components'
+import Heart from 'react-animated-heart'
 
 const fadeIn = keyframes`
   from {
@@ -36,17 +36,67 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 16px 32px;
+  padding-bottom: 50px;
+  position: relative;
+`
+
+const HeartContainer = styled.div`
+  position: absolute;
+  bottom: -25px;
+  right: -20px;
 `
 
 const ImageCard = ({apod}) => {
-  const [open, setOpen] = useState(false)
+  const [isLiked, setIsLiked] = useState(false);
 
-  const handleToggle = useCallback(() => setOpen((open) => !open), [])
+  const handleLike = (e) => {
+    saveLiked()
+    setIsLiked(!isLiked)
+  }
+
+  // Using local storage to save liked photos
+  const saveLiked = () => {
+    const liked = localStorage.getItem('liked')
+    if (!liked) {
+      localStorage.setItem('liked', JSON.stringify([apod.date]))
+      return
+    }
+
+    let likedArr = JSON.parse(liked)
+    if (!isLiked) {
+      if (!likedArr.includes(apod.date)) {
+        likedArr.push(apod.date)
+      }
+    } else {
+      likedArr = likedArr.filter(date => date !== apod.date)
+    }
+    console.log(likedArr)
+    localStorage.setItem('liked', JSON.stringify(likedArr))
+  }
+
+  const hasBeenLiked = useCallback(() => {
+    const liked = localStorage.getItem('liked')
+
+    if (liked) {
+      const likedArr = JSON.parse(liked)
+      for (const date of likedArr) {
+        if (date === apod.date) {
+          return true
+        }
+      }
+    }
+    return false
+  }, [apod.date])
+
+
+  useEffect(() => {
+    setIsLiked(hasBeenLiked())
+  }, [hasBeenLiked])
 
   return (
     <Card>
       <img 
-        alt={`APOD picture on ${apod.date}`}
+        alt={`APOD on ${apod.date}`}
         src={apod.url}
       />
 
@@ -55,24 +105,9 @@ const ImageCard = ({apod}) => {
             <Subheading>{apod.title}</Subheading>
             <TextStyle variation='subdued'>{apod.date}</TextStyle>
           </TextContainer>
-          {/* <Button
-            onClick={handleToggle}
-            ariaExpanded={open}
-            ariaControls='explanation-collapsible'
-            transition={{duration: '500ms', timingFunction: 'ease-in-out'}}
-            expandOnPrint
-          >
-            Show Description
-          </Button>
-          <Collapsible
-            id='explanation-collapsible'
-            open={open}
-
-          >
-            <TextContainer>
-              <p>{apod.explanation}</p>
-            </TextContainer>
-          </Collapsible> */}
+          <HeartContainer>
+            <Heart id={apod.date} isClick={isLiked} onClick={handleLike} />
+          </HeartContainer>
         </ContentContainer>
     </Card>
   )

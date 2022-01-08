@@ -42,7 +42,7 @@ const SpinnerSC = styled.div`
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: ${props => !props.hasMulti || props.isLoading ? '40vw' : '40vw 40vw'};
+  grid-template-columns: ${props => !props.hasMulti ? '40vw' : '40vw 40vw'};
   justify-content: center;
   margin: 0 auto;
   padding-top: 20px;
@@ -79,27 +79,20 @@ const App = () => {
     }
   }
 
-  const handleDateType = (val) => {
-    setIsMulti(val == 'multiple_dates')
-  }
-  const handleDateChange = (val) => {
-    setDates(val)
-  }
-
   const {hasMulti, msg} = getDateText(dates.start, dates.end)
 
   return (
     <Fragment>
       <TitleContainer>
-        <DisplayText size='large' element='h1'>Spacestagram</DisplayText>
+        <DisplayText size='large' element='h1'>Astronomy Picture of the Day</DisplayText>
       </TitleContainer>
       <InfoContainer>
         <Heading element='h2'>
           Showing: {msg}
         </Heading>
         <DateContainer>
-          <DateSelect handleDateType={handleDateType}/>
-          <DateModal isMulti={isMulti} dates={dates} handleDateChange={handleDateChange} />
+          <DateSelect setIsMulti={setIsMulti}/>
+          <DateModal isMulti={isMulti} dates={dates} setDates={setDates} />
         </DateContainer>
       </InfoContainer>
 
@@ -109,7 +102,7 @@ const App = () => {
         </SpinnerSC>
       </HideContainer>
       <HideContainer isLoading={isLoading}>
-        <Grid hasMulti={hasMulti} isLoading={isLoading}>
+        <Grid hasMulti={hasMulti}>
           <Cards dates={dates} setIsLoading={setIsLoading} />
         </Grid>
       </HideContainer>
