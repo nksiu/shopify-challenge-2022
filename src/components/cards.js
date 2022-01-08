@@ -1,6 +1,7 @@
 import { DisplayText } from '@shopify/polaris'
 import { Fragment, useEffect, useState } from 'react'
-import AxiosInstance from '../AxiosInstance'
+// import AxiosInstance from '../AxiosInstance'
+import axios from 'axios'
 import ImageCard from './imageCard'
 
 const Cards = ({ dates, setIsLoading }) => {
@@ -19,7 +20,7 @@ const Cards = ({ dates, setIsLoading }) => {
   const endDate = getDate(dates.end)
 
   const getApod = () => {
-    AxiosInstance.get(`?api_key=pGl7pcWw9EI3eZcAy9AL0gYlKz5nd63jYZJukjvs&start_date=${startDate}&end_date=${endDate}`).then(res => {
+    axios.get(`https://api.nasa.gov/planetary/apod?api_key=pGl7pcWw9EI3eZcAy9AL0gYlKz5nd63jYZJukjvs&start_date=${startDate}&end_date=${endDate}`).then(res => {
       setHasError(false)
       setData(res.data)
       setIsLoading(false)
